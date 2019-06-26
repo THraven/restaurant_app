@@ -123,8 +123,7 @@
             <property name="height_request">80</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">tafel: 
-</property>
+            <property name="label" translatable="yes">tafel: </property>
             <property name="use_underline">True</property>
             <property name="selectable">True</property>
             <attributes>
@@ -134,6 +133,19 @@
           <packing>
             <property name="x">17</property>
             <property name="y">230</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="width_request">100</property>
+            <property name="height_request">80</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">label</property>
+          </object>
+          <packing>
+            <property name="x">773</property>
+            <property name="y">247</property>
           </packing>
         </child>
       </object>

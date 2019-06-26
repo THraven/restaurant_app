@@ -7,9 +7,16 @@ from gi.repository import Gtk
 import sys
 
 class categoryLabel(Gtk.Label):
-    """this is for the labels with the category name on them on the top of the ."""
+    """this is for the labels with the category name on them on the top of the selection menu."""
 
     def __init__(self, grid, text, column):
+        """takes three args
+        grid: the gird it is suposed to put the label on.
+        text: the text that will apear on the label.
+        column: the column the where the label will apear.        
+        """
+
+
         Gtk.Label.__init__(self, "")
         self.set_text(text)
         grid.attach(self, column, 0, 1, 1)
