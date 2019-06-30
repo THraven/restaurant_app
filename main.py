@@ -14,7 +14,6 @@ class Handler():
         """this will en the main thread of the window thus closing it and ending the program"""
         Gtk.main_quit()
 
-
 def run():
     """will parse the .glade file and parse it into something gtk can use,
     then will launch the window."""
@@ -24,13 +23,23 @@ def run():
     # the Handler class is profided as the event handler
     builder.connect_signals(Handler())
 
+    # setting the main window and setting it to fullscreen
+    window = builder.get_object("MainWindow")
+    window.fullscreen()
+
     itemGrid = builder.get_object("itemGrid")
 
     # calling to the api of the webserver to get all the categories
-    result = rq.get(
+    categories = rq.get(
         'http://185.224.89.248/api/categories/getall?key=WLkdBrcdsgtwKJRFYyyh4j2D9SmzwXRbu94GCpXEsM5dUZGkWrM3ffunXgzN').json()
-    for i in enumerate(result):
-        comp.categoryLabel(itemGrid, i[1]["name"], i[0])
+    for category in enumerate(categories):
+        comp.categoryLabel(itemGrid, category[1]["name"], category[0])
+        # getting the items that belong with the category
+        items = rq.get(
+            'http://185.224.89.248/api/products/find/%s?key=WLkdBrcdsgtwKJRFYyyh4j2D9SmzwXRbu94GCpXEsM5dUZGkWrM3ffunXgzN' % category[1]["id"]).json()
+        for item in enumerate(items):
+            comp.itemButtons(itemGrid, item[1]["name"], item[1]["category"], item[0])
+
 
     # here the window to gotten out of the builder and the main loop is started
     window = builder.get_object("MainWindow")
