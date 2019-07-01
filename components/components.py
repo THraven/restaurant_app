@@ -22,13 +22,9 @@ class categoryLabel(Gtk.Label):
 class itemButtons(Gtk.Button):
     """this will put a button in the item grid with the name of the item it represents,
     the button will also add that item to the order."""
+    # the grid the items are going to sit in
 
-    # price of the item
-    price = 0
-    # name of the item
-    item = ""
-
-    def __init__(self, grid, text, column, row):
+    def __init__(self, orderGrid, grid, item, column, row):
         """takes four args
         grid: the grid it is suposed to put the button on.
         text: the text on the button (this will be the name of the item).
@@ -36,9 +32,10 @@ class itemButtons(Gtk.Button):
         row: the row the item should apear on.
         """
         Gtk.Button.__init__(self, "")
-        # label = Gtk.Label(text)
-        # label.set_padding(10,10)
-        self.set_label(text)
+
+        # setting the text of the button to the name of the item
+        self.set_label(item["name"])
         self.set_size_request(100, 80)
+
+        # putting it inside the grid
         grid.attach(self, column - 1, row + 1, 1, 1)
-        self.connect("clicked", lambda q=text: self.addItem(q))
