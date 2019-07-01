@@ -55,7 +55,8 @@ class Handler():
             orderGrid.show_all()
 
             # setting up the order field
-            self.order.update({item["name"]: {"itemLabel": itemname,
+            self.order.update({item["name"]: {"id": item["id"],
+                                             "itemLabel": itemname,
                                              "amountLabel": amount,
                                              "amount": 1,
                                              "priceLabel": price,
@@ -65,6 +66,25 @@ class Handler():
     def kill(self, *args):
         """this will en the main thread of the window thus closing it and ending the program"""
         Gtk.main_quit()
+
+    def finish(self, *args):
+        """this will finish the order, send it to the database and then clear the ticket"""
+        order = ""
+        # stringing all the id together into a string array
+        for i in self.order:
+            order += "%s," % self.order[i]["id"] * self.order[i]["amount"]
+        order = order[:-2]
+        # sending a get requist to the api to take my hot date in its database
+        r = rq.get("""http://185.224.89.248/api/tickets/add?tableNum=%s&waiter=kassa&order=[%s]&key=WLkdBrcdsgtwKJRFYyyh4j2D9SmzwXRbu94GCpXEsM5dUZGkWrM3ffunXgzN""" % (self.table, order))
+        for i in self.order:
+            self.order[i]["itemLabel"].destroy()
+            self.order[i]["amountLabel"].destroy()
+            self.order[i]["priceLabel"].destroy()
+        self.order.clear()
+        self.total = 0.00
+        totalPrice = builder.get_object("totalPrice")
+        totalPrice.set_text("    totaal prijs: €%.2f" % self.total)
+
 
 if __name__ == "__main__":
     """will parse the .glade file and parse it into something gtk can use,
