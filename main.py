@@ -12,20 +12,38 @@ class Handler():
     """the event handler for the app"""
 
     # these fields are for addItem to work
-    items = {}
+    order = {}
     def addItem(self, *args):
         builder = args[2]
         item = args[1][1]
-        
-        # creating item labels
-        orderGrid = builder.get_object("OrderList")
-        itemname = Gtk.Label(item["name"])
-        price = Gtk.Label(item["price"])
 
-        # attaching the items to the ticket and showing them
-        orderGrid.attach(itemname, 0, 0, 1, 1)
-        orderGrid.attach(price, 1, 0, 1, 1)
-        orderGrid.show_all()
+        # checking if that item already exists
+        if item["name"] in self.order:
+            idx = item["name"]
+            self.order[idx]["amount"] += 1
+            self.order[idx]["amountLabel"].set_text(str(self.order[idx]["amount"]))
+            self.order[idx]["price"] = "%.2f" % (float(item["price"]) * int(self.order[idx]["amount"]))
+            self.order[idx]["priceLabel"].set_text(self.order[idx]["price"])
+        else:
+            # creating item labels
+            orderGrid = builder.get_object("OrderList")
+            itemname = Gtk.Label(item["name"])
+            price = Gtk.Label(item["price"])
+            amount = Gtk.Label(1)
+
+            # attaching the items to the ticket and showing them
+            orderGrid.attach(amount, 0, len(self.order) +1 , 1, 1)
+            orderGrid.attach(itemname, 1, len(self.order) + 1, 1, 1)
+            orderGrid.attach(price, 2, len(self.order) + 1, 1, 1)
+            orderGrid.show_all()
+
+            # setting up the order field
+            self.order.update({item["name"]: {"itemLabel": itemname,
+                                             "amountLabel": amount,
+                                             "amount": 1,
+                                             "priceLabel": price,
+                                             "price": item["price"],
+                                             }})
 
     def kill(self, *args):
         """this will en the main thread of the window thus closing it and ending the program"""
