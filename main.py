@@ -1,4 +1,5 @@
 #!/bin/python
+# -*- coding: utf-8 -*-
 """when the main.py file is run the application will start and run the window."""
 
 import sys
@@ -12,10 +13,19 @@ class Handler():
     """the event handler for the app"""
 
     # these fields are for addItem to work
+    # total is for the total price
+    total = 0.00
+    # order is for containing all the data regarding the order
     order = {}
     def addItem(self, *args):
+        """will add a item to the order ticket"""
         builder = args[2]
         item = args[1][1]
+
+        # setting the total price
+        self.total += float(item["price"])
+        totalPrice = builder.get_object("totalPrice")
+        totalPrice.set_text("    totaal prijs: €%.2f" % self.total)
 
         # checking if that item already exists
         if item["name"] in self.order:
