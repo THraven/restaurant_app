@@ -12,6 +12,13 @@ from components import components as comp
 class Handler():
     """the event handler for the app"""
 
+    # these fields are for setTable to work
+    table = 0
+    def setTable(self, *args):
+        """this is for setting the table number"""
+        self.table = args[0].get_text()
+
+
     # these fields are for addItem to work
     # total is for the total price
     total = 0.00
@@ -58,7 +65,6 @@ class Handler():
     def kill(self, *args):
         """this will en the main thread of the window thus closing it and ending the program"""
         Gtk.main_quit()
-
 
 if __name__ == "__main__":
     """will parse the .glade file and parse it into something gtk can use,
